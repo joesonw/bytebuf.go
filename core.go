@@ -2,13 +2,11 @@ package bytebuf
 
 import (
 	"io"
-	"sync"
 )
 
 // ByteBuf ByteBuf itself
 type ByteBuf struct {
 	buf []byte
-	lock *sync.Mutex
 
 	capacity int
 	refCount int
@@ -23,7 +21,6 @@ type ByteBuf struct {
 func NewByteBuf(bufs ...[]byte) (*ByteBuf, error) {
 	b := &ByteBuf{
 		buf: make([]byte, ChunkSize),
-		lock: sync.Mutex{},
 
 		capacity:     ChunkSize,
 		readerMarker: -1,
@@ -133,12 +130,12 @@ func (b *ByteBuf) ReadableBytes() int {
 
 // Ref increment reference counter
 func (b *ByteBuf) Ref() {
-	b.refCount ++
+	b.refCount++
 }
 
 // Release decrement reference counter, underlying buf will be cleared once reference count is 0
 func (b *ByteBuf) Release() {
-	b.refCount --
+	b.refCount--
 	if b.refCount == 0 {
 		b.ForceRelease()
 	}
@@ -148,14 +145,4 @@ func (b *ByteBuf) Release() {
 func (b *ByteBuf) ForceRelease() {
 	b.refCount = 0
 	b.buf = nil
-}
-
-// Lock for the ease of parallel processing
-func (b *ByteBuf) Lock() {
-	b.lock.Lock()
-}
-
-// Unlock for the ease of parallel processing
-func (b *ByteBuf) Unlock() {
-	b.lock.Unlock()
 }
