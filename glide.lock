@@ -1,0 +1,6 @@
+hash: 73cf1ea848370528d37619c537d57a7b8830c9e68ee15ddc4bf384827954003e
+updated: 2017-10-13T13:43:01.180186962+08:00
+imports:
+- name: gopkg.in/go-playground/assert.v1
+  version: 4f4dfbc7d1c48336cf93399deae81aa9067e88af
+testImports: []
